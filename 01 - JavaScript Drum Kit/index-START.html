@@ -60,11 +60,25 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
   <script>
-    window.addEventListener('keydown', function(e) {
-      console.log(e.keyCode);
-      document.querySelectorAll('div.key')
+    window.addEventListener('keydown', function (e) {
+      // console.log(e.keyCode);
+      let button = document.querySelector(`div.key[data-key="${e.keyCode}"]`);
+      if (button != null) {
+        button.classList.add("playing");
+        let audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        audio.currentTime = 0;  //必須加currentTime否則會卡卡der
+        audio.play();
+      }
     });
 
+    let keys = document.querySelectorAll('.key');
+
+    keys.forEach(function (key) {
+      key.addEventListener("transitionend", function (e) {
+        if (e.propertyName !== 'transform') return;
+        this.classList.remove('playing');
+      })
+    });
   </script>
 
 
